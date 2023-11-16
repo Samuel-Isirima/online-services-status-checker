@@ -6,7 +6,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 const DetailsController = require('../controllers/DetailsController');
 const SettingsController = require('../controllers/SettingsController');
-const KYCController = require('../controllers/KYCController');
 
 const profileRouter: Router = Router()
 
@@ -46,7 +45,5 @@ profileRouter.get('/detals/update/ftystmmo', Auth, DetailsController.updateFiveT
 
 profileRouter.post('/update/settings', Auth, SettingsController.updateSettings)
 
-profileRouter.post('/kyc/upload/id', Auth, uploadKYCID.single('kyc_id'), KYCController.uploadID)
-profileRouter.post('/kyc/upload/proof-of-residence', Auth, uploadKYCPOR.single('kyc_por'), KYCController.uploadProofOfResidence)
 
 export default profileRouter;
