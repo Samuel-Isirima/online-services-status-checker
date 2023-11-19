@@ -10,6 +10,7 @@ export interface IResource extends Document {
   description: String;
   url: String;
   project: String;
+  config: Object;
 }
 
 //create profile schema
@@ -44,6 +45,10 @@ const resourceSchema = new Schema<IResource>(
       type: String,
       required: false,
     },
+    config: {
+      type: Array,
+      required: false,
+    }
 
   },
   {
