@@ -42,7 +42,7 @@ const resourceSchema = new Schema<IResource>(
     },
     project: {
       type: String,
-      required: true,
+      required: false,
     },
 
   },
