@@ -3,20 +3,26 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface IResource extends Document {
+  user_id: String;
   name: String;
   unique_id: String;
   tags: String;
-  type: String;
+  type: String;   //Web page, api endpoint, image, video, etc
   description: String;
   url: String;
   project: String;
   collection_id: String;     //Basically a collection ID
+  display_image_url: String;
 }
 
 //create profile schema
 const resourceSchema = new Schema<IResource>(
   {
     //correctly implement the IResource interface
+    user_id: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -46,6 +52,10 @@ const resourceSchema = new Schema<IResource>(
       required: false,
     },
     collection_id: {
+      type: String,
+      required: false,
+    },
+    display_image_url: {
       type: String,
       required: false,
     }
