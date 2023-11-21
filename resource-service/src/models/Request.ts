@@ -11,7 +11,7 @@ export interface IRequest extends Document {
   headers_data: Object;
 }
 
-//create profile schema
+//create Request schema
 const RequestSchema = new Schema<IRequest>(
   {
     //correctly implement the IRequest interface
@@ -46,6 +46,6 @@ const RequestSchema = new Schema<IRequest>(
 );
 
 
-const Profile: Model<IRequest> = mongoose.model('Requests', RequestSchema)//, 'Request_service_database');
-export default Profile;
+const Request: Model<IRequest> = mongoose.model('Requests', RequestSchema)//, 'Request_service_database');
+export default Request;
 
