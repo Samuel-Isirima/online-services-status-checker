@@ -18,6 +18,7 @@ ACTION      ACTION      ACTION
                 ACTION
 NOTIFICATION                WEBHOOK
 
+The action is not a child of the response; But rather directly a child of the resource. But associated to a response.
 
 Basic game plan
 

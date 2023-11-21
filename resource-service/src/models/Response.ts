@@ -10,7 +10,7 @@ export interface IResponse extends Document {
   http_status_code_range: String;
 }
 
-//create profile schema
+//create Response schema
 const ResponseSchema = new Schema<IResponse>(
   {
     //correctly implement the IResponse interface
@@ -41,6 +41,6 @@ const ResponseSchema = new Schema<IResponse>(
 );
 
 
-const Profile: Model<IResponse> = mongoose.model('Responses', ResponseSchema)//, 'Response_service_database');
-export default Profile;
+const Response: Model<IResponse> = mongoose.model('Responses', ResponseSchema)//, 'Response_service_database');
+export default Response;
 

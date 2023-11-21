@@ -1,6 +1,7 @@
 //create user model for mongodb
 import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
+import Response from "./Response";
 
 export interface IRequest extends Document {
   title: String;
@@ -45,6 +46,12 @@ const RequestSchema = new Schema<IRequest>(
   }
 );
 
+
+//Add a getRequests method to the resourceSchema
+RequestSchema.methods.getResponses = async function () {
+  const responses = await Response.find({ request_id: this._id });
+  return responses;
+};
 
 const Request: Model<IRequest> = mongoose.model('Requests', RequestSchema)//, 'Request_service_database');
 export default Request;
