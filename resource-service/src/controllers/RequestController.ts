@@ -50,17 +50,20 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const Request: IRequest | null = await Request.findOne({ unique_id: req.params.unique_id })
+    const Request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
     if(!Request)
     {
         return res.status(401).send({ message: `Request not found.`})
     }
 
     //Now update the Request
-    Request.name = req.body.name
+    Request.title = req.body.title
+    Request.method = req.body.method
+    Request.resource_id = req.body.resource_id
     Request.description = req.body.description
-    Request.url = req.body.url
-    Request.collection_id = req.body.collection_id
+    Request.body_data = req.body.body_data
+    Request.headers_data = req.body.headers_data
+    
 
     return res.status(200).send({ message: `Request updated successfully.`, Request: Request})
 })
