@@ -2,6 +2,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
 import Request, { IRequest } from "./Request";
+import Action from "./Action";
 
 export interface IResource extends Document {
   user_id: String;
@@ -75,6 +76,11 @@ resourceSchema.methods.getRequests = async function () {
   return requests;
 };
 
+//Add a getActions method to the resourceSchema
+resourceSchema.methods.getActions = async function () {
+  const actions = await Action.find({ resource_id: this._id });
+  return actions;
+};
 const Resource: Model<IResource> = mongoose.model('resources', resourceSchema)//, 'resource_service_database');
 
 export default Resource;

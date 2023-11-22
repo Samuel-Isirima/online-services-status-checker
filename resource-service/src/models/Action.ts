@@ -3,7 +3,8 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface IAction extends Document {
-    response_id: String;
+    resource_id: String;
+    responses_ids: Object;   //An array of responses for which this action is applicable
     notifications_config: Object;
     webhooks_config: Object;
 }
@@ -12,9 +13,13 @@ export interface IAction extends Document {
 const ActionSchema = new Schema<IAction>(
   {
     //correctly implement the IAction interface
-    response_id: {
+    resource_id: {
       type: String,
       required: true,
+    },
+    responses_ids: {
+      type: Object,
+      required: false,
     },
     notifications_config: {
       type: Object,
