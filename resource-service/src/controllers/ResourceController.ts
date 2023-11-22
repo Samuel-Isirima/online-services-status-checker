@@ -11,41 +11,18 @@ import { generateRandomString } from '../utils/RandomStringGenerator';
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
     const resources: IResource[] | void = await Resource.find()
-    .catch((err) => {
-        console.error(err)
-    })
+    if(!resources)
+    {
+        return res.status(401).send({ message: `No resources found.`})
+    }
 
     return res.status(200).send({ message: `Resources retrieved successfully.`, resources: resources})
 })
 
 export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
-    /**
-     * Details are;
-     * DOB, sex, country, nationality, phone
-     * 
-     */
-
+   
     var resource: IResource | null = null
-    const validationRule = {
-        "name" : "required|string|min:4",
-        "tags": "string",
-        "type": "required|string",
-        "description": "string",
-        "url": "required|string",
-        "collection_id": "string",
-    };
-    
-    const validationResult: any = await RequestValidator(req.body, validationRule, {})
-    .catch((err) => {
-    console.error(err)
-    })
-
-    if(validationResult.status === false)
-    {
-    const errorMessages: String[] = validationResult.formattedErrors
-    return res.status(401).send({ message: `${errorMessages[0]}`})
-    }
 
     // Get the user from the request object
     const user_ = req.user
@@ -66,4 +43,13 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
     return res.status(200).send({ message: `Resource created successfully.`, resource: resource})
 })
 
+export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
+{
+    const resource: IResource | null = await Resource.findOne({ unique_id: req.params.unique_id })
+    if(!resource)
+    {
+        return res.status(401).send({ message: `Resource not found.`})
+    }
+    return res.status(200).send({ message: `Resource retrieved successfully.`, resource: resource})
+})
 
