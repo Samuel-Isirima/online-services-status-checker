@@ -5,11 +5,20 @@ import InterestedResponse from "./InterestedResponse";
 
 export interface IAction extends Document {
     unique_id: String;
-    response_id: String;
     notifications_config: Object;
-    webhooks_config: Object;
+    webhooks_config: Object;        //Update after launch
+    custom_message: String; 
     interested_response_id: String;
 }
+
+/**
+ * Sample notification config
+ * {
+ * "enabled_channels": ["email", "sms", "slack"],
+ * }
+ * 
+ * 
+ */
 
 //create profile schema
 const ActionSchema = new Schema<IAction>(
@@ -19,16 +28,16 @@ const ActionSchema = new Schema<IAction>(
       type: String,
       required: true,
     },
-    response_id: {
-      type: String,
-      required: true,
-    },
     notifications_config: {
       type: Object,
       required: false,
     },
     webhooks_config: {
       type: Object,
+      required: false,
+    },
+    custom_message: {
+      type: String,
       required: false,
     },
     interested_response_id: {
