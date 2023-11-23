@@ -2,18 +2,15 @@ import e, { Router, Request, Response, NextFunction} from 'express'
 import bodyParser from 'body-parser';
 import RequestValidator from '../../helpers/RequestValidator';
 
-export const updateResource = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
+export const getResourceRequest = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
-    if(!req.params.resource_unique_id)
+    if(!req.params.resource_request_unique_id)
     {
-        return res.status(401).send({ message: `Resource id is required.`})
+        return res.status(401).send({ message: `Request identifier is not specified.`})
     }
-    
+
     const validationRule = {
-        "name" : "required|string|min:4",
-        "description": "string",
-        "display_image_url": "string",
-        "url": "required|string"
+        "active" : "required|boolean"
     };
     
     const validationResult: any = await RequestValidator(req.body, validationRule, {})

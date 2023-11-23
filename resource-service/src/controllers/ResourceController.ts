@@ -28,11 +28,12 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
     const user_ = req.user
     const user_id: String = user_.id
 
+    const unique_id: String = generateRandomString(30).toLowerCase()
     //Now create a new resource
     resource = new Resource({
         user_id: user_id,
         name: req.body.name,
-        unique_id: generateRandomString(30).toLowerCase(),
+        unique_id: unique_id,
         tags: req.body.tags,
         type: req.body.type,
         description: req.body.description,
@@ -67,7 +68,7 @@ export const update = (bodyParser.urlencoded(), async(req: Request, res: Respons
     resource.description = req.body.description
     resource.url = req.body.url
     resource.display_image_url = req.body.display_image_url
-    
+
     //save the resource
     await resource.save()
 
