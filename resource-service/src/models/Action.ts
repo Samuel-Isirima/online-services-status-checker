@@ -1,25 +1,27 @@
 //create user model for mongodb
 import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
+import InterestedResponse from "./InterestedResponse";
 
 export interface IAction extends Document {
-    resource_id: String;
-    responses_ids: Object;   //An array of responses for which this action is applicable
+    unique_id: String;
+    response_id: String;
     notifications_config: Object;
     webhooks_config: Object;
+    interested_response_id: String;
 }
 
 //create profile schema
 const ActionSchema = new Schema<IAction>(
   {
     //correctly implement the IAction interface
-    resource_id: {
+    unique_id: {
       type: String,
       required: true,
     },
-    responses_ids: {
-      type: Object,
-      required: false,
+    response_id: {
+      type: String,
+      required: true,
     },
     notifications_config: {
       type: Object,
@@ -28,6 +30,10 @@ const ActionSchema = new Schema<IAction>(
     webhooks_config: {
       type: Object,
       required: false,
+    },
+    interested_response_id: {
+      type: String,
+      required: false,
     }
   },
   {
@@ -35,7 +41,12 @@ const ActionSchema = new Schema<IAction>(
   }
 );
 
+//Add a getResponse method to the resourceSchema
+ActionSchema.methods.getResponse = async function () {
+const response = await InterestedResponse.findOne({ _id: this.response_id });
+return response;
+}
 
-const Action: Model<IAction> = mongoose.model('Actions', ActionSchema)//, 'Action_service_database');
+const Action: Model<IAction> = mongoose.model('actions', ActionSchema)//, 'Action_service_database');
 export default Action;
 

@@ -68,6 +68,9 @@ export const update = (bodyParser.urlencoded(), async(req: Request, res: Respons
     resource.url = req.body.url
     resource.collection_id = req.body.collection_id
 
+    //save the resource
+    await resource.save()
+
     return res.status(200).send({ message: `Resource updated successfully.`, resource: resource})
 })
 

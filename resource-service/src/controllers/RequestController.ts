@@ -59,11 +59,13 @@ export const update = (bodyParser.urlencoded(), async(req: Request, res: Respons
     //Now update the Request
     Request.title = req.body.title
     Request.method = req.body.method
-    Request.resource_id = req.body.resource_id
     Request.description = req.body.description
     Request.body_data = req.body.body_data
     Request.headers_data = req.body.headers_data
-    
+
+    //save the Request
+    await Request.save()
+
 
     return res.status(200).send({ message: `Request updated successfully.`, Request: Request})
 })
