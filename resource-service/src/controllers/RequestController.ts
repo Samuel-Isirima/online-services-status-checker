@@ -74,3 +74,17 @@ export const update = (bodyParser.urlencoded(), async(req: Request, res: Respons
     return res.status(200).send({ message: `Request updated successfully.`, Request: Request})
 })
 
+export const updateActiveness = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
+{
+    const Request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
+    if(!Request)
+    {
+        return res.status(401).send({ message: `Request not found.`})
+    }
+
+    //Now update the Request
+    Request.active = req.body.active
+
+    //save the Request
+    await Request.save()
+})

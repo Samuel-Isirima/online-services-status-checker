@@ -12,6 +12,7 @@ export interface IRequest extends Document {
   description: String;
   body_data: Object;
   headers_data: Object;
+  active: Boolean;
 }
 
 //create Request schema
@@ -45,6 +46,10 @@ const RequestSchema = new Schema<IRequest>(
     headers_data: {
       type: Object,
       required: false,
+    },
+    active: {
+      type: Boolean,
+      default: true
     }
   },
   {
