@@ -58,9 +58,7 @@ export const update = (bodyParser.urlencoded(), async(req: Request, res: Respons
 
     //Update the interested_response record
     interested_response.title = req.body.title
-    interested_response.category = req.body.category
-    interested_response.http_status_code = req.body.http_status_code
-    interested_response.http_status_code_range = req.body.http_status_code_range
+    interested_response.description = req.body.description
     
     //Save the interested_response record
     await interested_response.save()

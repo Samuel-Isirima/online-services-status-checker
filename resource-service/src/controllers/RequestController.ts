@@ -23,6 +23,8 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
    
     var Request: IRequest | null = null
 
+    const unique_id: String = generateRandomString(30).toLowerCase()
+
     //Now create a new Request
     Request = new ResourceRequest({
         title: req.body.title,
@@ -31,6 +33,7 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
         description: req.body.description,
         body_data: req.body.body_data,
         headers_data: req.body.headers_data,
+        unique_id: unique_id,
     })
     
     if(!Request)
@@ -40,6 +43,7 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
     return res.status(200).send({ message: `Request created successfully.`, Request: Request})
 })
+
 
 export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
@@ -73,9 +77,10 @@ export const update = (bodyParser.urlencoded(), async(req: Request, res: Respons
     return res.status(200).send({ message: `Request updated successfully.`, Request: Request})
 })
 
+
 export const updateActiveness = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const Request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
+    const Request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.resource_request_unique_id })
     if(!Request)
     {
         return res.status(401).send({ message: `Request not found.`})

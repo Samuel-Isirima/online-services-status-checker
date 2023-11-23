@@ -10,6 +10,7 @@ import Action from "./Action";
 export interface IInterestedResponse extends Document {
   unique_id: String;
   title: String;
+  description: String;
   request_id: String;
   category: String;     //Specific code response or code range
   http_status_code: String;
@@ -27,6 +28,10 @@ const InterestedResponseSchema = new Schema<IInterestedResponse>(
     title: {
       type: String,
       required: true,
+    },
+    description: {
+      type: String,
+      required: false,
     },
     request_id: {
       type: String,
