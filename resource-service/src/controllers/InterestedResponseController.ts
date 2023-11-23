@@ -1,6 +1,7 @@
 import e, { Router, Request, Response, NextFunction} from 'express'
 import bodyParser from 'body-parser';
 import InterestedResponse, { IInterestedResponse } from '../models/InterestedResponse';
+import { generateRandomString } from '../utils/RandomStringGenerator';
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -18,10 +19,11 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 {
    
     var interested_response: IInterestedResponse | null = null
+    const unique_id: String = generateRandomString(30).toLowerCase()
 
     //Now create a new interested_response
     interested_response = new InterestedResponse({
-        unique_id: req.body.unique_id,
+        unique_id: unique_id,
         title: req.body.title,
         request_id: req.body.request_id,
         category: req.body.category,

@@ -10,23 +10,23 @@ import { generateRandomString } from '../utils/RandomStringGenerator';
 
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const Requests: IRequest[] | void = await ResourceRequest.find({resource_id: req.params.resource_id})
-    if(!Requests)
+    const requests: IRequest[] | void = await ResourceRequest.find({resource_id: req.params.resource_id})
+    if(!requests)
     {
         return res.status(401).send({ message: `No Requests found.`})
     }
-    return res.status(200).send({ message: `Requests retrieved successfully.`, Requests: Requests})
+    return res.status(200).send({ message: `Requests retrieved successfully.`, requests: requests})
 })
 
 export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
    
-    var Request: IRequest | null = null
+    var request: IRequest | null = null
 
     const unique_id: String = generateRandomString(30).toLowerCase()
 
     //Now create a new Request
-    Request = new ResourceRequest({
+    request = new ResourceRequest({
         title: req.body.title,
         method: req.body.method,
         resource_id: req.body.resource_id,
@@ -36,59 +36,61 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
         unique_id: unique_id,
     })
     
-    if(!Request)
+    if(!request)
     {
         return res.status(401).send({ message: `An unexpected error occurred while trying to create the Request.`})
     }
 
-    return res.status(200).send({ message: `Request created successfully.`, Request: Request})
+    return res.status(200).send({ message: `Request created successfully.`, request: request})
 })
 
 
 export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const Request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
-    if(!Request)
+    const request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
+    if(!request)
     {
         return res.status(401).send({ message: `Request not found.`})
     }
-    return res.status(200).send({ message: `Request retrieved successfully.`, Request: Request})
+    return res.status(200).send({ message: `Request retrieved successfully.`, request: request})
 })
 
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const Request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
-    if(!Request)
+    const request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
+    if(!request)
     {
         return res.status(401).send({ message: `Request not found.`})
     }
 
     //Now update the Request
-    Request.title = req.body.title
-    Request.method = req.body.method
-    Request.description = req.body.description
-    Request.body_data = req.body.body_data
-    Request.headers_data = req.body.headers_data
+    request.title = req.body.title
+    request.method = req.body.method
+    request.description = req.body.description
+    request.body_data = req.body.body_data
+    request.headers_data = req.body.headers_data
 
     //save the Request
-    await Request.save()
+    await request.save()
 
-    return res.status(200).send({ message: `Request updated successfully.`, Request: Request})
+    return res.status(200).send({ message: `Request updated successfully.`, request: request})
 })
 
 
 export const updateActiveness = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const Request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.resource_request_unique_id })
-    if(!Request)
+    const request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.resource_request_unique_id })
+    if(!request)
     {
         return res.status(401).send({ message: `Request not found.`})
     }
 
     //Now update the Request
-    Request.active = req.body.active
+    request.active = req.body.active
 
     //save the Request
-    await Request.save()
+    await request.save()
+
+    return res.status(200).send({ message: `Request status updated successfully.`, request: request})
 })

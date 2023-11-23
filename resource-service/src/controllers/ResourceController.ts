@@ -4,7 +4,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 import bcrypt from 'bcrypt';
 
-import RequestValidator from '../helpers/RequestValidator';
 import Resource, { IResource } from '../models/Resource';
 import { generateRandomString } from '../utils/RandomStringGenerator';
 
