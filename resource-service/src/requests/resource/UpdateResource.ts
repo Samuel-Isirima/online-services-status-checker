@@ -1,21 +1,15 @@
 import e, { Router, Request, Response, NextFunction} from 'express'
 import bodyParser from 'body-parser';
-import RequestValidator from '../helpers/RequestValidator';
-export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
+import RequestValidator from '../../helpers/RequestValidator';
+
+export const updateResource = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
-    /**
-     * Details are;
-     * DOB, sex, country, nationality, phone
-     * 
-     */
 
     const validationRule = {
         "name" : "required|string|min:4",
-        "tags": "string",
-        "type": "required|string",
         "description": "string",
-        "url": "required|string",
-        "collection_id": "string",
+        "display_image_url": "string",
+        "url": "required|string"
     };
     
     const validationResult: any = await RequestValidator(req.body, validationRule, {})
