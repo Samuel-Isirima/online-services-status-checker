@@ -8,6 +8,9 @@ export interface IResponse extends Document {
   category: String;     //Specific code response or code range
   http_status_code: String;
   http_status_code_range: String;
+  response_body: Object;
+  response_headers: Object;
+  response_time: Number;
 }
 
 //create profile schema

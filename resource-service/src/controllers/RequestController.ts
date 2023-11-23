@@ -5,7 +5,7 @@ dotenv.config();
 import bcrypt from 'bcrypt';
 
 import RequestValidator from '../helpers/RequestValidator';
-import ResourceRequest, { IRequest } from '../models/Request';
+import ResourceRequest, { IRequest } from '../models/ResourceRequest';
 import { generateRandomString } from '../utils/RandomStringGenerator';
 
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
@@ -15,7 +15,6 @@ export const index = (bodyParser.urlencoded(), async(req: Request, res: Response
     {
         return res.status(401).send({ message: `No Requests found.`})
     }
-
     return res.status(200).send({ message: `Requests retrieved successfully.`, Requests: Requests})
 })
 
@@ -33,6 +32,11 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
         body_data: req.body.body_data,
         headers_data: req.body.headers_data,
     })
+    
+    if(!Request)
+    {
+        return res.status(401).send({ message: `An unexpected error occurred while trying to create the Request.`})
+    }
 
     return res.status(200).send({ message: `Request created successfully.`, Request: Request})
 })
