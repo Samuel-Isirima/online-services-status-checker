@@ -65,13 +65,14 @@ async function consumeRequestQueue(queueName)
             //Now send the response to the response queue or instead write it to the database
             //Create the element of the response class
 
-            const requestResponse: IRequestResponse = await RequestResponse.create({
+            const responseDetails: Object =
+            {
                 request_id: request.request_id,
                 response_body: response.data,
                 response_headers: response.headers,
                 http_status_code: response.status,
                 response_time: response.duration
-            })
+            }
 
             //Now send to module that'll process and check if this response is one the user is interested in (ie has created an interestedResponse for)
 

@@ -21,10 +21,38 @@ NOTIFICATION                WEBHOOK
 Basic game plan
 
 Each resource, you can set many requests
-For each request, you can set many responses (with tags: Warning, bad)
+For each request, you can set many responses (with tags: Warning, bad) [Remind users that an important request header is content type: 
+xxx-url-form-data, json, etc
+]
 For each response, you can set one action configuration (Notify different channels, send webhook)
 
 UPDATES AFTER LAUNCH
 1. Add webhook support
 2. Add phone numbers and emails for notifications (After verification)
 3. Select specific phone numbers and emails for each action
+
+
+This is how the request service will work:
+There will be 10 queues for sending the requests
+
+The requests will be sent in 20mins intervals
+
+From when a request is created, it is noted
+
+Once it's 20 mins time, it is added to one of the request queues, then processed and the 
+response processed also; 
+There will be response processing queues also
+
+The time when the request was carried out is stored against the request in a table.
+When it's 20 mins again, it gets picked up and the process continues
+
+
+
+
+
+
+
+MARKETING BITS:
+NO DENIAL ATTACK AS REQUESTS ARE SENT MINUTES APART
+
+For the queues, device a method to efficiently share the messages to the queues without overloading one queue
