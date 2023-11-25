@@ -18,6 +18,19 @@ export const processActions = async (actions: IAction[]) =>
         if(notificationConfiguration.email)
         {
             //Create notification object for email and send over to the notification service
+
+            //to get recipient, get the interested response and then get the request and then get the user
+
+            const interestedResponse = InterestedResponse.findOne({_id: action.interested_response_id});
+            
+
+            const notification: INotification = 
+            {
+                type: "email",
+                message: action.custom_message,
+                recipient: "email",
+                other_details: {}
+            }
         }
         if(notificationConfiguration.slack)
         {
