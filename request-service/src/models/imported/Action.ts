@@ -5,7 +5,11 @@ import InterestedResponse from "./InterestedResponse";
 
 export interface IAction extends Document {
     unique_id: String;
-    notifications_config: Object;
+    notifications_config: {
+      email: Boolean;
+      sms: Boolean;
+      slack: Boolean;
+    };
     webhooks_config: Object;        //Update after launch
     custom_message: String; 
     interested_response_id: String;
