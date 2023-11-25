@@ -1,3 +1,5 @@
+import RequestResponse, { IRequestResponse } from "../models/RequestResponse"
+
 const amqp = require('amqplib')
 const axios = require('axios')
 
@@ -5,8 +7,35 @@ async function consumeRequestQueue(queueName)
 {
     const connection = await amqp.connect('amqp://localhost')
     const channel = await connection.createChannel()
-
     await channel.assertQueue(queueName)
+
+    //Create an Axios instance
+    const instance = axios.create();
+
+    // Add a request interceptor
+    instance.interceptors.request.use((config) => 
+    {
+        config.metadata = { start_time: new Date() };
+        return config;
+    }, 
+    (error) => 
+    {
+        return Promise.reject(error);
+    });
+
+    // Add a response interceptor
+    instance.interceptors.response.use((response) => 
+    {
+        response.config.metadata.end_time = new Date();
+        response.duration = response.config.metadata.end_time - response.config.metadata.start_time;
+        return response;
+    }, 
+    (error) => 
+    {
+        return Promise.reject(error);
+    });
+
+
 
     channel.consume(queueName, async (message) => 
     {
@@ -34,7 +63,17 @@ async function consumeRequestQueue(queueName)
             })
 
             //Now send the response to the response queue or instead write it to the database
+            //Create the element of the response class
 
+            const requestResponse: IRequestResponse = await RequestResponse.create({
+                request_id: request.request_id,
+                response_body: response.data,
+                response_headers: response.headers,
+                http_status_code: response.status,
+                response_time: response.duration
+            })
+
+            //Now send to module that'll process and check if this response is one the user is interested in (ie has created an interestedResponse for)
 
             channel.ack(message) // Acknowledge the message
         }

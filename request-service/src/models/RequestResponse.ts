@@ -2,7 +2,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
 
-export interface IResponse extends Document {
+export interface IRequestResponse extends Document {
   request_id: String;
   http_status_code: String;
   response_body: Object;
@@ -11,7 +11,7 @@ export interface IResponse extends Document {
 }
 
 //create profile schema
-const ResponseSchema = new Schema<IResponse>(
+const RequestResponseSchema = new Schema<IRequestResponse>(
   {
     request_id: {
       type: String,
@@ -40,6 +40,6 @@ const ResponseSchema = new Schema<IResponse>(
 );
 
 
-const Profile: Model<IResponse> = mongoose.model('Responses', ResponseSchema)//, 'Response_service_database');
-export default Profile;
+const RequestResponse: Model<IRequestResponse> = mongoose.model('Responses', RequestResponseSchema)//, 'Response_service_database');
+export default RequestResponse;
 
