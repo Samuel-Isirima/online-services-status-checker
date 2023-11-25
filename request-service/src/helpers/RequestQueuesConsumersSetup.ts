@@ -21,6 +21,20 @@ async function consumeRequestQueue(queueName)
             console.log(`Received message from ${queueName}: ${request}`)
 
             //Send the request now
+            const url = request.url;
+            const method = request.method;
+            const bodyData = request.body_data;
+            const headersData = request.headers_data;
+            //Now send the request
+            const response = await axios({
+                method: method,
+                url: url,
+                data: bodyData,
+                headers: headersData
+            })
+
+            //Now send the response to the response queue or instead write it to the database
+
 
             channel.ack(message) // Acknowledge the message
         }
