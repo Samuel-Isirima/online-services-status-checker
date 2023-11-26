@@ -48,7 +48,8 @@ When it's 20 mins again, it gets picked up and the process continues
 
 
 
-
+Code change; 
+Move structure from microservice architecture to monolith. There's no need for microservices for this product At this moment
 
 
 

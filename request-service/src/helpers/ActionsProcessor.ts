@@ -20,22 +20,15 @@ export const processActions = async (actions: IAction[]) =>
         {
             //Create notification object for email and send over to the notification service
 
-            //to get recipient, get the interested response and then get the request and then get the user
-
-            const interestedResponse = await InterestedResponse.findOne({_id: action.interested_response_id});
-            if(!interestedResponse)
-            {
-                return;
-            }
-
-
-
+            //Get user's email address
+            const user = await User.findOne({ _id: action.user_id });
+            const email = user.email;
 
             const notification: INotification = 
             {
                 type: "email",
                 message: action.custom_message,
-                recipient: "email",
+                recipient: email,
                 other_details: {}
             }
         }
