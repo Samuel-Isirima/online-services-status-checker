@@ -6,8 +6,10 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
 import Action from "./Action";
+import ResourceRequest from "./ResourceRequest";
 
 export interface IInterestedResponse extends Document {
+  user_id: String;
   unique_id: String;
   title: String;
   description: String;
@@ -60,6 +62,11 @@ const InterestedResponseSchema = new Schema<IInterestedResponse>(
 InterestedResponseSchema.methods.getActions = async function () {
   const actions = await Action.find({ interested_response_id: this._id });
   return actions;
+};
+
+InterestedResponseSchema.methods.getResourceRequest = async function () {
+  const request = await ResourceRequest.findOne({ _id : this.request_id });
+  return request;
 };
 
 const InterestedResponse: Model<IInterestedResponse> = mongoose.model('interested_responses', InterestedResponseSchema)//, 'InterestedResponse_service_database');

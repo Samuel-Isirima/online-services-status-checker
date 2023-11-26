@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import InterestedResponse from "./InterestedResponse";
 
 export interface IAction extends Document {
+    user_id: String;
     unique_id: String;
     notifications_config: {
       email: Boolean;

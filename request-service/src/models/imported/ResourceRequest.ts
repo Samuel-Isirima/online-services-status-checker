@@ -5,6 +5,7 @@ import Response from "./InterestedResponse";
 import Resource from "./Resource";
 
 export interface IRequest extends Document {
+  user_id: String;
   unique_id: String;
   title: String;
   method: String;
@@ -70,6 +71,6 @@ RequestSchema.methods.getResource = async function () {
   return resource;
 };
 
-const Request: Model<IRequest> = mongoose.model('requests', RequestSchema)//, 'Request_service_database');
-export default Request;
+const ResourceRequest: Model<IRequest> = mongoose.model('requests', RequestSchema)//, 'Request_service_database');
+export default ResourceRequest;
 

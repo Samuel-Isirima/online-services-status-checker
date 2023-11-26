@@ -1,5 +1,6 @@
 import { type } from "os";
 import { IAction } from "../models/imported/Action";
+import InterestedResponse from "../models/imported/InterestedResponse";
 
 interface INotification {
 type: String;
@@ -11,7 +12,7 @@ other_details: Object;
 export const processActions = async (actions: IAction[]) => 
 {
     //for each action, send a message to the notification service queue
-    actions.forEach((action) => 
+    actions.forEach(async (action) => 
     {
         //Get action's notification configuration
         const notificationConfiguration = action.notifications_config;
@@ -21,8 +22,14 @@ export const processActions = async (actions: IAction[]) =>
 
             //to get recipient, get the interested response and then get the request and then get the user
 
-            const interestedResponse = InterestedResponse.findOne({_id: action.interested_response_id});
-            
+            const interestedResponse = await InterestedResponse.findOne({_id: action.interested_response_id});
+            if(!interestedResponse)
+            {
+                return;
+            }
+
+
+
 
             const notification: INotification = 
             {
