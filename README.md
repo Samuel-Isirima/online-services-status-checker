@@ -29,6 +29,7 @@ For each response, you can set one action configuration (Notify different channe
 UPDATES AFTER LAUNCH
 1. Add webhook support
 2. Add phone numbers and emails for notifications (After verification)
+2.5 User can select which email and phone or slack channel to be connected for which action
 3. Select specific phone numbers and emails for each action
 
 
