@@ -51,6 +51,8 @@ export const processActions = async (actions: IAction[]) =>
                 other_details: {}
             }
             //create notification object for slack and send over to the notification service
+
+            sendNotificationObjectToQueue(notification);
         }
         if(notificationConfiguration.sms)
         {
@@ -64,6 +66,8 @@ export const processActions = async (actions: IAction[]) =>
                 other_details: {}
             }
             //create notification object for sms and send over to the notification service
+
+            sendNotificationObjectToQueue(notification);
         }
         //Send a message to the notification service queue
         //The message should contain the action id and the interested response id
