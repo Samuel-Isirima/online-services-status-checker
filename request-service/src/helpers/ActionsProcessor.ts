@@ -1,6 +1,7 @@
 import { type } from "os";
 import { IAction } from "../models/imported/Action";
 import InterestedResponse from "../models/imported/InterestedResponse";
+import User, { IUser } from "../models/imported/User";
 const amqp = require('amqplib')
 
 interface INotification {
@@ -21,7 +22,12 @@ export const processActions = async (actions: IAction[]) =>
         //Get action's notification configuration
         const notificationConfiguration = action.notifications_config;
                     //Get user's email address
-        const user = await User.findOne({ _id: action.user_id });
+        const user: IUser | null = await User.findOne({ _id: action.user_id });
+        if(!user)
+        {   
+            console.log("User not found");
+            return false;
+        }
         
         if(notificationConfiguration.email)
         {
