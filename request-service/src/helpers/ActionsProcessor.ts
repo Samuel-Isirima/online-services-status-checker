@@ -47,7 +47,7 @@ export const processActions = async (actions: IAction[]) =>
         }
         if(notificationConfiguration.slack)
         {
-            const slack = user.slack;
+            const slack = ''
 
             const notification: INotification = 
             {
@@ -62,7 +62,7 @@ export const processActions = async (actions: IAction[]) =>
         }
         if(notificationConfiguration.sms)
         {
-            const sms = user.sms;
+            const sms = '';
 
             const notification: INotification = 
             {
