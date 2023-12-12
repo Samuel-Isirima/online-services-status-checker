@@ -1,6 +1,0 @@
-{
-    "services": {
-        "auth": "http://localhost:3000",
-        "profle": "http://localhost:3100"
-    }
-}
