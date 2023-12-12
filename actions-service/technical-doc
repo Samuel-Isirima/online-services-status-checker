@@ -1,4 +1,0 @@
-AUTH SERVICE 
-
-Because authentication would usually be needed in synchronous operations where a response is needed immediately and the program has to wait 
-for the response before continuing running, communication to and fro the auth service would be HTTP/REST based
