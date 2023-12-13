@@ -84,7 +84,7 @@ export const processActions = async (actions: IAction[]) =>
 
 const sendNotificationObjectToQueue = async (notification: INotification) =>
 {
-    const queue = "notification_service_queue";
+    const queue = "NOTIFICATION_SERVICE_QUEUE";
 
     try {
         const connection = await amqp.connect("amqp://localhost");
