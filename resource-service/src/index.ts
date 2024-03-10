@@ -21,7 +21,7 @@ try
 {
     app.listen(port, () => 
     {
-        console.log(`Profile service running on http://localhost:${port}`)
+        console.log(`Resource service running on http://localhost:${port}`)
     })
 } 
 catch (error : any) 

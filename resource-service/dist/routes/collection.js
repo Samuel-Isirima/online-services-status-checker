@@ -8,6 +8,6 @@ const CollectionController = require('../controllers/CollectionController');
 const collectionRouter = (0, express_1.Router)();
 collectionRouter.post('/create', Auth_1.Auth, CollectionController.create);
 collectionRouter.get('/', Auth_1.Auth, CollectionController.index);
-collectionRouter.get('/:id', Auth_1.Auth, CollectionController.get);
-collectionRouter.post('/:id/update', Auth_1.Auth, CollectionController.update);
+collectionRouter.get('/:identifier', Auth_1.Auth, CollectionController.get);
+collectionRouter.post('/:identifier/update', Auth_1.Auth, CollectionController.update);
 exports.default = collectionRouter;

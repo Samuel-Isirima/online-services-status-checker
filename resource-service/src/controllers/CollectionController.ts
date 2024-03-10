@@ -27,6 +27,20 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
     const user_ = req.user
     const user_id: String = user_.id
 
+
+    //now check if a resource with the same name exists
+    collection = await Collection.findOne
+    ({
+        name: req.body.name,
+        user_id: user_id,
+    })
+
+    if(collection)
+    {
+        return res.status(401).send({ message: `Collection with this name already exists.`})
+    }
+
+
     const unique_id: String = generateRandomString(30).toLowerCase()
     //Now create a new collection
     collection = await Collection.create({
@@ -56,12 +70,19 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.identifier })
+    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.identifier, user_id: req.user.id})
     if(!collection)
     {
         return res.status(401).send({ message: `Collection not found.`})
     }
 
+    //make sure there is no other collection with the same name
+    const collection_ = await Collection.findOne({ name: req.body.name, user_id: req.user.id})
+    if(collection_ && collection_.unique_id !== req.params.identifier)
+    {
+        return res.status(401).send({ message: `Collection with this name already exists.`})
+    }
+    
     //Now update the collection
     collection.name = req.body.name
     collection.description = req.body.description

@@ -1,1 +1,13 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const Auth_1 = require("../middleware/Auth");
+const dotenv = require('dotenv');
+dotenv.config();
+const ResourceController = require('../controllers/ResourceController');
+const resourceRouter = (0, express_1.Router)();
+resourceRouter.post('/create', Auth_1.Auth, ResourceController.create);
+resourceRouter.get('/', Auth_1.Auth, ResourceController.index);
+resourceRouter.get('/:identifier', Auth_1.Auth, ResourceController.get);
+resourceRouter.post('/:identifier/update', Auth_1.Auth, ResourceController.update);
+exports.default = resourceRouter;

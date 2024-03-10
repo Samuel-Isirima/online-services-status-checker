@@ -12,27 +12,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.update = exports.get = exports.add = exports.index = void 0;
+exports.update = exports.get = exports.create = exports.index = void 0;
 const body_parser_1 = __importDefault(require("body-parser"));
 const dotenv = require('dotenv');
 dotenv.config();
 const Resource_1 = __importDefault(require("../models/Resource"));
 const RandomStringGenerator_1 = require("../utils/RandomStringGenerator");
+const Collection_1 = __importDefault(require("../models/Collection"));
 exports.index = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const resources = yield Resource_1.default.find();
+    const resources = yield Resource_1.default.find({ user_id: req.user.id });
     if (!resources) {
         return res.status(401).send({ message: `No resources found.` });
     }
     return res.status(200).send({ message: `Resources retrieved successfully.`, resources: resources });
 }));
-exports.add = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.create = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var resource = null;
     // Get the user from the request object
     const user_ = req.user;
     const user_id = user_.id;
     const unique_id = (0, RandomStringGenerator_1.generateRandomString)(30).toLowerCase();
+    //First confirm if this user owns the collection
+    var collection = null;
+    console.log('These are the params', req.body);
+    collection = yield Collection_1.default.findOne({
+        _id: req.body.collection_identifier,
+        user_id: user_id
+    });
+    if (!collection) {
+        return res.status(401).send({ message: `Collection not found.` });
+    }
     //Now create a new resource
-    resource = new Resource_1.default({
+    resource = yield Resource_1.default.create({
         user_id: user_id,
         name: req.body.name,
         unique_id: unique_id,
@@ -40,19 +51,19 @@ exports.add = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter
         type: req.body.type,
         description: req.body.description,
         url: req.body.url,
-        collection_id: req.body.collection_id,
+        collection_id: req.body.collection_identifier,
     });
     return res.status(200).send({ message: `Resource created successfully.`, resource: resource });
 }));
 exports.get = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const resource = yield Resource_1.default.findOne({ unique_id: req.params.unique_id });
+    const resource = yield Resource_1.default.findOne({ unique_id: req.params.identifier, user_id: req.user.id });
     if (!resource) {
         return res.status(401).send({ message: `Resource not found.` });
     }
     return res.status(200).send({ message: `Resource retrieved successfully.`, resource: resource });
 }));
 exports.update = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const resource = yield Resource_1.default.findOne({ unique_id: req.params.unique_id });
+    const resource = yield Resource_1.default.findOne({ unique_id: req.params.identifier });
     if (!resource) {
         return res.status(401).send({ message: `Resource not found.` });
     }

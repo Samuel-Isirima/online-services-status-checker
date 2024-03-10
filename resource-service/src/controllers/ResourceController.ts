@@ -35,12 +35,23 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
     console.log('These are the params', req.body)
     collection = await Collection.findOne
     ({
-        _id: req.body.collection_identifier,
+        unique_id: req.body.collection_identifier,
         user_id: user_id
     })
     if(!collection)
     {
         return res.status(401).send({ message: `Collection not found.`})
+    }
+
+    //now check if a resource with the same name exists
+    resource = await Resource.findOne
+    ({
+        name: req.body.name,
+        collection_unique_id: req.body.collection_identifier,
+    })
+    if(resource)
+    {
+        return res.status(401).send({ message: `Resource with this name already exists.`})
     }
 
     //Now create a new resource
@@ -52,11 +63,12 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
         type: req.body.type,
         description: req.body.description,
         url: req.body.url,
-        collection_id: req.body.collection_identifier,
+        collection_unique_id: req.body.collection_identifier,
     })
 
     return res.status(200).send({ message: `Resource created successfully.`, resource: resource})
 })
+
 
 export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
@@ -76,6 +88,14 @@ export const update = (bodyParser.urlencoded(), async(req: Request, res: Respons
     {
         return res.status(401).send({ message: `Resource not found.`})
     }
+
+    //make sure there is no other resource with the same name
+    const resource_ = await Resource.findOne({ name: req.body.name, collection_unique_id: resource.collection_unique_id})
+    if(resource_ && resource_.unique_id !== req.params.identifier)
+    {
+        return res.status(401).send({ message: `Resource with this name already exists.`})
+    }
+    
 
     //Now update the resource
     resource.name = req.body.name

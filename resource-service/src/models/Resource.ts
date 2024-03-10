@@ -12,7 +12,7 @@ export interface IResource extends Document {
   type: String;   //Web page, api endpoint, image, video, etc
   description: String;
   url: String;
-  collection_id: String;     //Basically a collection ID
+  collection_unique_id: String;     //Basically a collection ID
   display_image_url: String;
 
 }
@@ -51,7 +51,7 @@ const resourceSchema = new Schema<IResource>(
       required: true,
     },
 
-    collection_id: {
+    collection_unique_id: {
       type: String,
       required: true,
     },
