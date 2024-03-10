@@ -11,7 +11,7 @@ const collectionRouter: Router = Router()
 
 collectionRouter.post('/create', Auth, CollectionController.create)
 collectionRouter.get('/', Auth, CollectionController.index)
-collectionRouter.get('/:id', Auth, CollectionController.get)
-collectionRouter.post('/:id/update', Auth, CollectionController.update)
+collectionRouter.get('/:identifier', Auth, CollectionController.get)
+collectionRouter.post('/:identifier/update', Auth, CollectionController.update)
 
 export default collectionRouter;

@@ -26,6 +26,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //create user model for mongodb
 const mongoose_1 = __importStar(require("mongoose"));
 const userSchema = new mongoose_1.Schema({
+    //correctly implement the IUser interface
+    _id: {
+        type: String,
+    },
     email: {
         type: String,
         required: true,

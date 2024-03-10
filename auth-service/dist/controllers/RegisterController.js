@@ -76,5 +76,5 @@ exports.register = (body_parser_1.default.urlencoded(), (req, res, next) => __aw
         return res.status(403).send({ message: `An unexpected error has occured. Please try again later.`,
             error: error });
     }
-    return res.status(200).send({ message: `Account created successfully. Welcome to the bank API!` });
+    return res.status(200).send({ message: `Account created successfully. Welcome to the ORSM API!` });
 }));

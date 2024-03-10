@@ -6,10 +6,11 @@ import bcrypt from 'bcrypt';
 
 import Resource, { IResource } from '../models/Resource';
 import { generateRandomString } from '../utils/RandomStringGenerator';
+import Collection, { ICollection } from '../models/Collection';
 
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const resources: IResource[] | void = await Resource.find()
+    const resources: IResource[] | void = await Resource.find({user_id: req.user.id})
     if(!resources)
     {
         return res.status(401).send({ message: `No resources found.`})
@@ -18,7 +19,7 @@ export const index = (bodyParser.urlencoded(), async(req: Request, res: Response
     return res.status(200).send({ message: `Resources retrieved successfully.`, resources: resources})
 })
 
-export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
+export const create = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
    
     var resource: IResource | null = null
@@ -28,8 +29,22 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
     const user_id: String = user_.id
 
     const unique_id: String = generateRandomString(30).toLowerCase()
+
+    //First confirm if this user owns the collection
+    var collection: ICollection | null = null
+    console.log('These are the params', req.body)
+    collection = await Collection.findOne
+    ({
+        _id: req.body.collection_identifier,
+        user_id: user_id
+    })
+    if(!collection)
+    {
+        return res.status(401).send({ message: `Collection not found.`})
+    }
+
     //Now create a new resource
-    resource = new Resource({
+    resource = await Resource.create({
         user_id: user_id,
         name: req.body.name,
         unique_id: unique_id,
@@ -37,7 +52,7 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
         type: req.body.type,
         description: req.body.description,
         url: req.body.url,
-        collection_id: req.body.collection_id,
+        collection_id: req.body.collection_identifier,
     })
 
     return res.status(200).send({ message: `Resource created successfully.`, resource: resource})
@@ -45,7 +60,7 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const resource: IResource | null = await Resource.findOne({ unique_id: req.params.unique_id })
+    const resource: IResource | null = await Resource.findOne({ unique_id: req.params.identifier, user_id: req.user.id})
     if(!resource)
     {
         return res.status(401).send({ message: `Resource not found.`})
@@ -56,7 +71,7 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const resource: IResource | null = await Resource.findOne({ unique_id: req.params.unique_id })
+    const resource: IResource | null = await Resource.findOne({ unique_id: req.params.identifier })
     if(!resource)
     {
         return res.status(401).send({ message: `Resource not found.`})

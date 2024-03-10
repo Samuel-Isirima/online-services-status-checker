@@ -1,11 +1,11 @@
 import e, { Router } from 'express'
 import collectionRouter from './collection';
+import resourceRouter from './resource';
 
 const router = Router()
 
 router.use('/resource/collection', collectionRouter)
-router.get('/', (req, res) => {
-    res.send('Resource service is running');
-})
+router.use('/resource', resourceRouter)
+
 
 export default router;

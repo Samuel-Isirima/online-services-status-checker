@@ -26,6 +26,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //create email verification model for mongodb
 const mongoose_1 = __importStar(require("mongoose"));
 const userEmailVerificationSchema = new mongoose_1.Schema({
+    _id: {
+        type: String,
+    },
     email: {
         type: String,
         required: true,

@@ -9,7 +9,7 @@ import { generateRandomString } from '../utils/RandomStringGenerator';
 
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const collections: ICollection[] | void = await Collection.find()
+    const collections: ICollection[] | void = await Collection.find({user_id: req.user.id})
     if(!collections)
     {
         return res.status(401).send({ message: `No collections found.`})
@@ -39,13 +39,13 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
     })
 
 
-    console.log(`Thisis the collection: ${collection}`)
     return res.status(200).send({ message: `Collection created successfully.`, collection: collection})
 })
 
 export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.id })
+    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.identifier, user_id: req.user.id})
+    
     if(!collection)
     {
         return res.status(401).send({ message: `Collection not found.`})
@@ -56,7 +56,7 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.id })
+    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.identifier })
     if(!collection)
     {
         return res.status(401).send({ message: `Collection not found.`})

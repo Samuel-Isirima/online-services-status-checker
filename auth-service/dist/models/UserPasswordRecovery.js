@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //create userr password recovery model for mongodb
 const mongoose_1 = require("mongoose");
 const passwordRecoverySchema = new mongoose_1.Schema({
+    _id: {
+        type: String,
+    },
     email: {
         type: String,
         required: true,
