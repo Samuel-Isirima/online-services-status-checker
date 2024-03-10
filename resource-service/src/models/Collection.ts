@@ -50,10 +50,10 @@ const collectionSchema = new Schema<ICollection>(
 );
 
 //Add a getRequests method to the collectionSchema
-collectionSchema.methods.getResources = async function () {
-  const resources = await Resource.find({ collection_id: this._id });
-  return resources;
-};
+// collectionSchema.methods.getResources = async function () {
+//   const resources = await Resource.find({ collection_id: this._id });
+//   return resources;
+// };
 
 
 const Collection: Model<ICollection> = mongoose.model('collections', collectionSchema)//, 'collection_service_database');

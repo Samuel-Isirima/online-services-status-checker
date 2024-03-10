@@ -4,7 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const profile_1 = __importDefault(require("./profile"));
+const collection_1 = __importDefault(require("./collection"));
 const router = (0, express_1.Router)();
-router.use('/profile', profile_1.default);
+router.use('/resource/collection', collection_1.default);
+router.get('/', (req, res) => {
+    res.send('Resource service is running');
+});
 exports.default = router;

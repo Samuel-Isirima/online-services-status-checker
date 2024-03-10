@@ -18,7 +18,7 @@ export const index = (bodyParser.urlencoded(), async(req: Request, res: Response
     return res.status(200).send({ message: `Collections retrieved successfully.`, collections: collections})
 })
 
-export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
+export const create = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
    
     var collection: ICollection | null = null
@@ -29,7 +29,7 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
     const unique_id: String = generateRandomString(30).toLowerCase()
     //Now create a new collection
-    collection = new Collection({
+    collection = await Collection.create({
         user_id: user_id,
         name: req.body.name,
         unique_id: unique_id,
@@ -38,12 +38,14 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
         display_image_url: req.body.display_image_url
     })
 
+
+    console.log(`Thisis the collection: ${collection}`)
     return res.status(200).send({ message: `Collection created successfully.`, collection: collection})
 })
 
 export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.unique_id })
+    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.id })
     if(!collection)
     {
         return res.status(401).send({ message: `Collection not found.`})
@@ -54,7 +56,7 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.unique_id })
+    const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.id })
     if(!collection)
     {
         return res.status(401).send({ message: `Collection not found.`})

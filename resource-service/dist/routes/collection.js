@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const Auth_1 = require("../middleware/Auth");
+const dotenv = require('dotenv');
+dotenv.config();
+const CollectionController = require('../controllers/CollectionController');
+const collectionRouter = (0, express_1.Router)();
+collectionRouter.post('/create', Auth_1.Auth, CollectionController.create);
+collectionRouter.get('/', Auth_1.Auth, CollectionController.index);
+collectionRouter.get('/:id', Auth_1.Auth, CollectionController.get);
+collectionRouter.post('/:id/update', Auth_1.Auth, CollectionController.update);
+exports.default = collectionRouter;
