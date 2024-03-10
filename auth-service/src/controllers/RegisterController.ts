@@ -84,7 +84,7 @@ export const register = (bodyParser.urlencoded(), async(req: Request, res: Respo
     error: error})
     }
 
-  return res.status(200).send({ message: `Account created successfully. Welcome to the bank API!`})
+  return res.status(200).send({ message: `Account created successfully. Welcome to the ORSM API!`})
 })
 
 
