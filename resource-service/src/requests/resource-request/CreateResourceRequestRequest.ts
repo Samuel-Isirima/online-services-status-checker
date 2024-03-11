@@ -2,19 +2,16 @@ import e, { Router, Request, Response, NextFunction} from 'express'
 import bodyParser from 'body-parser';
 import RequestValidator from '../../helpers/RequestValidator';
 
-export const updateResource = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
+export const createResourceRequest = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
-    if(!req.params.resource_request_unique_id)
-    {
-        return res.status(401).send({ message: `Request identifier is not specified.`})
-    }
-    
+
     const validationRule = {
-        "method" : "required|string",
-        "title": "string|min:4",
-        "description": "string|min:4",
-        "body_data": "string",
-        "header_data": "string"
+        "title": 'string|required',
+        "method": 'string|required',
+        "resource_identifier": 'string|required',
+        "description": 'string',
+        "body_data": 'string',
+        "headers_data" : 'string',
     };
     
     const validationResult: any = await RequestValidator(req.body, validationRule, {})
@@ -27,6 +24,11 @@ export const updateResource = (bodyParser.urlencoded(), async(req: Request, res:
     {
     const errorMessages: String[] = validationResult.formattedErrors
     return res.status(401).send({ message: `${errorMessages[0]}`})
+    }
+
+    if((req.body.method !in ['POST', 'GET', 'PUT', 'PATCH']))
+    {
+        return res.status(401).send({ message: `Please select a valid and supported HTTP method`})
     }
     
     //call the next middleware

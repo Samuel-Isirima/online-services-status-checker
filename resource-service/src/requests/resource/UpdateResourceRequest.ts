@@ -4,7 +4,7 @@ import RequestValidator from '../../helpers/RequestValidator';
 
 export const updateResource = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
-    if(!req.params.resource_unique_id)
+    if(!req.params.identifier)
     {
         return res.status(401).send({ message: `Resource id is required.`})
     }

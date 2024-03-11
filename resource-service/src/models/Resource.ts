@@ -1,8 +1,6 @@
 //create user model for mongodb
 import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
-import Request, { IRequest } from "./ResourceRequest";
-import Action from "./Action";
 
 export interface IResource extends Document {
   user_id: String;
@@ -66,11 +64,11 @@ const resourceSchema = new Schema<IResource>(
   }
 );
 
-//Add a getRequests method to the resourceSchema
-resourceSchema.methods.getRequests = async function () {
-  const requests = await Request.find({ resource_id: this._id });
-  return requests;
-};
+// //Add a getRequests method to the resourceSchema
+// resourceSchema.methods.getRequests = async function () {
+//   const requests = await Request.find({ resource_id: this._id });
+//   return requests;
+// };
 
 
 const Resource: Model<IResource> = mongoose.model('resources', resourceSchema)//, 'resource_service_database');

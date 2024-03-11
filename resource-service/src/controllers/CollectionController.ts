@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 
 import Collection, { ICollection } from '../models/Collection';
 import { generateRandomString } from '../utils/RandomStringGenerator';
+import Resource, { IResource } from '../models/Resource';
 
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
@@ -56,6 +57,8 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
     return res.status(200).send({ message: `Collection created successfully.`, collection: collection})
 })
 
+
+
 export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
     const collection: ICollection | null = await Collection.findOne({ unique_id: req.params.identifier, user_id: req.user.id})
@@ -65,6 +68,18 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
         return res.status(401).send({ message: `Collection not found.`})
     }
     return res.status(200).send({ message: `Collection retrieved successfully.`, collection: collection})
+})
+
+
+
+export const getCollectionResources = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
+{
+    const resources: IResource[] | null = await Resource.find({ collection_unique_id: req.params.identifier, user_id: req.user.id})
+    if(!resources)
+    {
+        return res.status(401).send({ message: `Resources not found.`})
+    }
+    return res.status(200).send({ message: `Resources retrieved successfully.`, resources: resources})
 })
 
 

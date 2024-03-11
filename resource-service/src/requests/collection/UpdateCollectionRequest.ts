@@ -2,16 +2,17 @@ import e, { Router, Request, Response, NextFunction} from 'express'
 import bodyParser from 'body-parser';
 import RequestValidator from '../../helpers/RequestValidator';
 
-export const addResourceRequest = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
+export const updateCollection = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
-
+    if(!req.params.identifier)
+    {
+        return res.status(401).send({ message: `Collection id is required.`})
+    }
+    
     const validationRule = {
-        "title": 'string|required',
-        "method": 'string|required',
-        "resource_id": 'string|required',
-        "description": 'string',
-        "body_data": 'string',
-        "headers_data" : 'string',
+        "name" : "required|string|min:4",
+        "description": "string",
+        "display_image_url": "string",
     };
     
     const validationResult: any = await RequestValidator(req.body, validationRule, {})

@@ -3,9 +3,9 @@ import bodyParser from 'body-parser';
 
 export const getResource = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
-    if(!req.params.collection_unique_id)
+    if(!req.params.identifier)
     {
-        return res.status(401).send({ message: `Collection not specified.`})
+        return res.status(401).send({ message: `Resource id is required.`})
     }
 
     //call the next middleware

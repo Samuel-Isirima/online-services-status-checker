@@ -7,10 +7,11 @@ import bcrypt from 'bcrypt';
 import Resource, { IResource } from '../models/Resource';
 import { generateRandomString } from '../utils/RandomStringGenerator';
 import Collection, { ICollection } from '../models/Collection';
+import ResourceRequest, { IResourceRequest } from '../models/ResourceRequest';
 
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const resources: IResource[] | void = await Resource.find({user_id: req.user.id})
+    const resources: IResource[] | void = await Resource.find({user_id: req.user.id, collection_unique_id: req.params.collection_identifier})
     if(!resources)
     {
         return res.status(401).send({ message: `No resources found.`})
@@ -32,12 +33,12 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
 
     //First confirm if this user owns the collection
     var collection: ICollection | null = null
-    console.log('These are the params', req.body)
     collection = await Collection.findOne
     ({
         unique_id: req.body.collection_identifier,
         user_id: user_id
     })
+    
     if(!collection)
     {
         return res.status(401).send({ message: `Collection not found.`})
@@ -80,6 +81,16 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
     return res.status(200).send({ message: `Resource retrieved successfully.`, resource: resource})
 })
 
+
+export const getResourceRequests = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
+{
+    const requests: IResourceRequest[] | null = await ResourceRequest.find({ resource_unique_id: req.params.identifier, user_id: req.user.id})
+    if(!requests)
+    {
+        return res.status(401).send({ message: `Requests not found.`})
+    }
+    return res.status(200).send({ message: `Requests retrieved successfully.`, requests: requests})
+})
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {

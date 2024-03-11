@@ -1,7 +1,6 @@
 //create user model for mongodb
 import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
-import Request, { IRequest } from "./ResourceRequest";
 import Action from "./Action";
 import Resource from "./Resource";
 

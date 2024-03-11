@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 
 export const getResourceRequest = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
-    if(!req.params.resource_request_unique_id)
+    if(!req.params.identifier)
     {
         return res.status(401).send({ message: `Request identifier is not specified.`})
     }

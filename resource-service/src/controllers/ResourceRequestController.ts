@@ -5,12 +5,13 @@ dotenv.config();
 import bcrypt from 'bcrypt';
 
 import RequestValidator from '../helpers/RequestValidator';
-import ResourceRequest, { IRequest } from '../models/ResourceRequest';
+import ResourceRequest, { IResourceRequest } from '../models/ResourceRequest';
 import { generateRandomString } from '../utils/RandomStringGenerator';
+import Resource, { IResource } from '../models/Resource';
 
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const requests: IRequest[] | void = await ResourceRequest.find({resource_unique_id: req.params.resource_identifier})
+    const requests: IResourceRequest[] | void = await ResourceRequest.find({resource_unique_id: req.params.resource_identifier})
     if(!requests)
     {
         return res.status(401).send({ message: `No Requests found.`})
@@ -18,18 +19,32 @@ export const index = (bodyParser.urlencoded(), async(req: Request, res: Response
     return res.status(200).send({ message: `Requests retrieved successfully.`, requests: requests})
 })
 
-export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
+
+
+export const create = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
    
-    var request: IRequest | null = null
+    var request: IResourceRequest | null = null
+
+    //check if the resource exists and is owned by the user
+    const resource: IResource | null = await Resource.findOne
+    ({
+        unique_id: req.body.resource_identifier,
+        user_id: req.user.id
+    })
+
+    if(!resource)
+    {
+        return res.status(401).send({ message: `Resource not found.`})
+    }
 
     const unique_id: String = generateRandomString(30).toLowerCase()
 
     //Now create a new Request
-    request = new ResourceRequest({
+    request =  await ResourceRequest.create({
         title: req.body.title,
         method: req.body.method,
-        resource_unique_id: req.body.resource_unique_id,
+        resource_unique_id: req.body.resource_identifier,
         description: req.body.description,
         body_data: req.body.body_data,
         headers_data: req.body.headers_data,
@@ -47,7 +62,7 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
+    const request: IResourceRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
     if(!request)
     {
         return res.status(401).send({ message: `Request not found.`})
@@ -58,7 +73,7 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
+    const request: IResourceRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
     if(!request)
     {
         return res.status(401).send({ message: `Request not found.`})
@@ -80,7 +95,7 @@ export const update = (bodyParser.urlencoded(), async(req: Request, res: Respons
 
 export const updateActiveness = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const request: IRequest | null = await ResourceRequest.findOne({ unique_id: req.params.resource_request_unique_id })
+    const request: IResourceRequest | null = await ResourceRequest.findOne({ unique_id: req.params.resource_request_unique_id })
     if(!request)
     {
         return res.status(401).send({ message: `Request not found.`})
