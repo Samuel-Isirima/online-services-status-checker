@@ -54,7 +54,7 @@ const RequestSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    resource_id: {
+    resource_unique_id: {
         type: String,
         required: true,
     },
@@ -87,7 +87,7 @@ RequestSchema.methods.getResponses = function () {
 //Add a getResource method to the RequestSchema
 RequestSchema.methods.getResource = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        const resource = yield Resource_1.default.findOne({ _id: this.resource_id });
+        const resource = yield Resource_1.default.findOne({ _id: this.resource_unique_id });
         return resource;
     });
 };

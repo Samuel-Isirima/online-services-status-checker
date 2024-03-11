@@ -12,10 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addResource = void 0;
+exports.createResource = void 0;
 const body_parser_1 = __importDefault(require("body-parser"));
 const RequestValidator_1 = __importDefault(require("../../helpers/RequestValidator"));
-exports.addResource = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createResource = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const validationRule = {
         "name": "required|string|min:4",
         "tags": "string",
@@ -27,9 +27,11 @@ exports.addResource = (body_parser_1.default.urlencoded(), (req, res, next) => _
     };
     const validationResult = yield (0, RequestValidator_1.default)(req.body, validationRule, {})
         .catch((err) => {
+        console.log('Error occurred while validating the request body');
         console.error(err);
     });
     if (validationResult.status === false) {
+        console.log('Validation failed');
         const errorMessages = validationResult.formattedErrors;
         return res.status(401).send({ message: `${errorMessages[0]}` });
     }

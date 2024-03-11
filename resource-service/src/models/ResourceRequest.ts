@@ -8,7 +8,7 @@ export interface IRequest extends Document {
   unique_id: String;
   title: String;
   method: String;
-  resource_id: String;
+  resource_unique_id: String;
   description: String;
   body_data: Object;
   headers_data: Object;
@@ -31,7 +31,7 @@ const RequestSchema = new Schema<IRequest>(
       type: String,
       required: true,
     },
-    resource_id: {
+    resource_unique_id: {
       type: String,
       required: true,
     },
@@ -66,7 +66,7 @@ RequestSchema.methods.getResponses = async function () {
 
 //Add a getResource method to the RequestSchema
 RequestSchema.methods.getResource = async function () {
-  const resource = await Resource.findOne({ _id: this.resource_id });
+  const resource = await Resource.findOne({ _id: this.resource_unique_id });
   return resource;
 };
 

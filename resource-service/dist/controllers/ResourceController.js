@@ -36,11 +36,19 @@ exports.create = (body_parser_1.default.urlencoded(), (req, res, next) => __awai
     var collection = null;
     console.log('These are the params', req.body);
     collection = yield Collection_1.default.findOne({
-        _id: req.body.collection_identifier,
+        unique_id: req.body.collection_identifier,
         user_id: user_id
     });
     if (!collection) {
         return res.status(401).send({ message: `Collection not found.` });
+    }
+    //now check if a resource with the same name exists
+    resource = yield Resource_1.default.findOne({
+        name: req.body.name,
+        collection_unique_id: req.body.collection_identifier,
+    });
+    if (resource) {
+        return res.status(401).send({ message: `Resource with this name already exists.` });
     }
     //Now create a new resource
     resource = yield Resource_1.default.create({
@@ -51,7 +59,7 @@ exports.create = (body_parser_1.default.urlencoded(), (req, res, next) => __awai
         type: req.body.type,
         description: req.body.description,
         url: req.body.url,
-        collection_id: req.body.collection_identifier,
+        collection_unique_id: req.body.collection_identifier,
     });
     return res.status(200).send({ message: `Resource created successfully.`, resource: resource });
 }));
@@ -66,6 +74,11 @@ exports.update = (body_parser_1.default.urlencoded(), (req, res, next) => __awai
     const resource = yield Resource_1.default.findOne({ unique_id: req.params.identifier });
     if (!resource) {
         return res.status(401).send({ message: `Resource not found.` });
+    }
+    //make sure there is no other resource with the same name
+    const resource_ = yield Resource_1.default.findOne({ name: req.body.name, collection_unique_id: resource.collection_unique_id });
+    if (resource_ && resource_.unique_id !== req.params.identifier) {
+        return res.status(401).send({ message: `Resource with this name already exists.` });
     }
     //Now update the resource
     resource.name = req.body.name;

@@ -2,7 +2,7 @@ import e, { Router, Request, Response, NextFunction} from 'express'
 import bodyParser from 'body-parser';
 import RequestValidator from '../../helpers/RequestValidator';
 
-export const addResource = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
+export const createResource = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
 
     const validationRule = {

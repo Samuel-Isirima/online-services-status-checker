@@ -14,25 +14,6 @@ export const register = (bodyParser.urlencoded(), async(req: Request, res: Respo
 {
     var user: IUser | null = null
 
-    const validationRule = {
-        "email": "required|string|email",
-        "first_name": "required|string",
-        "last_name": "required|string",
-        "password": "required|string|min:8",
-        "confirm_password": "required|string|min:8",
-    };
-
-    const validationResult: any = await RequestValidator(req.body, validationRule, {})
-    .catch((err) => {
-    console.error(err)
-    })
-
-    if(validationResult.status === false)
-    {
-    const errorMessages: String[] = validationResult.formattedErrors
-    return res.status(401).send({ message: `Validation failed. ${errorMessages}`})
-    }
-
     //check if passwords match
     if(req.body.password !== req.body.confirm_password)
     {

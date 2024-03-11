@@ -69,7 +69,7 @@ const resourceSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    collection_id: {
+    collection_unique_id: {
         type: String,
         required: true,
     },

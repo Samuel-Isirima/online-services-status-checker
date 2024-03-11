@@ -17,7 +17,7 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/api/v1', routes_1.default);
 try {
     app.listen(port, () => {
-        console.log(`Profile service running on http://localhost:${port}`);
+        console.log(`Resource service running on http://localhost:${port}`);
     });
 }
 catch (error) {

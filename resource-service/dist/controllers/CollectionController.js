@@ -30,6 +30,14 @@ exports.create = (body_parser_1.default.urlencoded(), (req, res, next) => __awai
     // Get the user from the request object
     const user_ = req.user;
     const user_id = user_.id;
+    //now check if a resource with the same name exists
+    collection = yield Collection_1.default.findOne({
+        name: req.body.name,
+        user_id: user_id,
+    });
+    if (collection) {
+        return res.status(401).send({ message: `Collection with this name already exists.` });
+    }
     const unique_id = (0, RandomStringGenerator_1.generateRandomString)(30).toLowerCase();
     //Now create a new collection
     collection = yield Collection_1.default.create({
@@ -43,16 +51,21 @@ exports.create = (body_parser_1.default.urlencoded(), (req, res, next) => __awai
     return res.status(200).send({ message: `Collection created successfully.`, collection: collection });
 }));
 exports.get = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const collection = yield Collection_1.default.findById(req.params.identifier);
-    if (!collection || collection.user_id !== req.user.id) {
+    const collection = yield Collection_1.default.findOne({ unique_id: req.params.identifier, user_id: req.user.id });
+    if (!collection) {
         return res.status(401).send({ message: `Collection not found.` });
     }
     return res.status(200).send({ message: `Collection retrieved successfully.`, collection: collection });
 }));
 exports.update = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const collection = yield Collection_1.default.findOne({ unique_id: req.params.identifier });
+    const collection = yield Collection_1.default.findOne({ unique_id: req.params.identifier, user_id: req.user.id });
     if (!collection) {
         return res.status(401).send({ message: `Collection not found.` });
+    }
+    //make sure there is no other collection with the same name
+    const collection_ = yield Collection_1.default.findOne({ name: req.body.name, user_id: req.user.id });
+    if (collection_ && collection_.unique_id !== req.params.identifier) {
+        return res.status(401).send({ message: `Collection with this name already exists.` });
     }
     //Now update the collection
     collection.name = req.body.name;

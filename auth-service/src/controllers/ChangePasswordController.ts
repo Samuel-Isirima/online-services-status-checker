@@ -12,21 +12,6 @@ export const changePassword = (bodyParser.urlencoded(), async(req: Request, res:
 {
     var user: IUser | null = null
 
-    const validationRule = {
-        "password": "required|string|min:8",
-        "confirm_password": "required|string|min:8",
-    };
-    
-    const validationResult: any = await RequestValidator(req.body, validationRule, {})
-    .catch((err) => {
-    console.error(err)
-    })
-
-    if(validationResult.status === false)
-    {
-    const errorMessages: String[] = validationResult.formattedErrors
-    return res.status(401).send({ message: `Validation failed. ${errorMessages}`})
-    }
 
     // Get the user from the request object
     const user_ = req.user

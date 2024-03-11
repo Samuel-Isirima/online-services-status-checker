@@ -14,21 +14,6 @@ export const requestToken = (bodyParser.urlencoded(), async(req: Request, res: R
 {
     var user: IUser | null = null
 
-    const validationRule = {
-        "email": "required|string|email",
-    };
-
-    const validationResult: any = await RequestValidator(req.body, validationRule, {})
-    .catch((err) => {
-    console.error(err)
-    })
-
-    if(validationResult.status === false)
-    {
-    const errorMessages: String[] = validationResult.formattedErrors
-    return res.status(401).send({ message: `Validation failed. ${errorMessages}`})
-    }
-
     //check if email already exists
     user = await User.findOne({email: req.body.email})
 
@@ -67,22 +52,6 @@ export const requestToken = (bodyParser.urlencoded(), async(req: Request, res: R
 export const verifyEmail = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
     var user: IUser | null = null
-
-    const validationRule = {
-        "email": "required|string|email",
-        "token": "required|string",
-    };
-
-    const validationResult: any = await RequestValidator(req.body, validationRule, {})
-    .catch((err) => {
-    console.error(err)
-    })
-
-    if(validationResult.status === false)
-    {
-    const errorMessages: String[] = validationResult.formattedErrors
-    return res.status(401).send({ message: `Validation failed. ${errorMessages}`})
-    }
 
     //check if email already exists
     user = await User.findOne({email: req.body.email})

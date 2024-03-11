@@ -10,7 +10,7 @@ import { generateRandomString } from '../utils/RandomStringGenerator';
 
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const requests: IRequest[] | void = await ResourceRequest.find({resource_id: req.params.resource_id})
+    const requests: IRequest[] | void = await ResourceRequest.find({resource_unique_id: req.params.resource_identifier})
     if(!requests)
     {
         return res.status(401).send({ message: `No Requests found.`})
@@ -29,7 +29,7 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
     request = new ResourceRequest({
         title: req.body.title,
         method: req.body.method,
-        resource_id: req.body.resource_id,
+        resource_unique_id: req.body.resource_unique_id,
         description: req.body.description,
         body_data: req.body.body_data,
         headers_data: req.body.headers_data,

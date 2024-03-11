@@ -19,7 +19,7 @@ dotenv.config();
 const ResourceRequest_1 = __importDefault(require("../models/ResourceRequest"));
 const RandomStringGenerator_1 = require("../utils/RandomStringGenerator");
 exports.index = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const requests = yield ResourceRequest_1.default.find({ resource_id: req.params.resource_id });
+    const requests = yield ResourceRequest_1.default.find({ resource_unique_id: req.params.resource_identifier });
     if (!requests) {
         return res.status(401).send({ message: `No Requests found.` });
     }
@@ -32,7 +32,7 @@ exports.add = (body_parser_1.default.urlencoded(), (req, res, next) => __awaiter
     request = new ResourceRequest_1.default({
         title: req.body.title,
         method: req.body.method,
-        resource_id: req.body.resource_id,
+        resource_unique_id: req.body.resource_unique_id,
         description: req.body.description,
         body_data: req.body.body_data,
         headers_data: req.body.headers_data,
