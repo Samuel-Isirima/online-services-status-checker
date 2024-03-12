@@ -40,6 +40,18 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
 
     const unique_id: String = generateRandomString(30).toLowerCase()
 
+    //Make sure the request title is unique
+    request = await ResourceRequest.findOne
+    ({
+        title: req.body.title,
+        resource_unique_id: req.body.resource_identifier
+    })
+
+    if(request)
+    {
+        return res.status(401).send({ message: `Request with this title already exists.`})
+    }
+
     //Now create a new Request
     request =  await ResourceRequest.create({
         title: req.body.title,
@@ -62,8 +74,18 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
 
 export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const request: IResourceRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
+    const request: IResourceRequest | null = await ResourceRequest.findOne({ unique_id: req.params.identifier })
     if(!request)
+    {
+        return res.status(401).send({ message: `Request not found.`})
+    }
+    //check if the resource exists and is owned by the user
+    const resource: IResource | null = await Resource.findOne
+    ({
+        unique_id: request.resource_unique_id,
+        user_id: req.user.id
+    })
+    if(!resource)
     {
         return res.status(401).send({ message: `Request not found.`})
     }
@@ -73,15 +95,35 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const request: IResourceRequest | null = await ResourceRequest.findOne({ unique_id: req.params.unique_id })
+    const request: IResourceRequest | null = await ResourceRequest.findOne({ unique_id: req.params.identifier })
     if(!request)
     {
         return res.status(401).send({ message: `Request not found.`})
     }
+    //check if the resource exists and is owned by the user
+    const resource: IResource | null = await Resource.findOne
+    ({
+        unique_id: request.resource_unique_id,
+        user_id: req.user.id
+    })
+    if(!resource)
+    {
+        return res.status(401).send({ message: `Request not found.`})
+    }
+
+    //make sure the new title is unique
+    const newRequest: IResourceRequest | null = await ResourceRequest.findOne
+    ({
+        title: req.body.title,
+        resource_unique_id: request.resource_unique_id
+    })
+    if(newRequest)
+    {
+        return res.status(401).send({ message: `Request with this title already exists.`})
+    }
 
     //Now update the Request
     request.title = req.body.title
-    request.method = req.body.method
     request.description = req.body.description
     request.body_data = req.body.body_data
     request.headers_data = req.body.headers_data

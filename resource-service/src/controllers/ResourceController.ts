@@ -38,7 +38,7 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
         unique_id: req.body.collection_identifier,
         user_id: user_id
     })
-    
+
     if(!collection)
     {
         return res.status(401).send({ message: `Collection not found.`})
@@ -84,7 +84,7 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
 
 export const getResourceRequests = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
-    const requests: IResourceRequest[] | null = await ResourceRequest.find({ resource_unique_id: req.params.identifier, user_id: req.user.id})
+    const requests: IResourceRequest[] | null = await ResourceRequest.find({ resource_unique_id: req.params.identifier})
     if(!requests)
     {
         return res.status(401).send({ message: `Requests not found.`})

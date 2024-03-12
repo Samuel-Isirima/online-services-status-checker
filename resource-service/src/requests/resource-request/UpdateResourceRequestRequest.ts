@@ -10,11 +10,11 @@ export const updateResourceRequest = (bodyParser.urlencoded(), async(req: Reques
     }
     
     const validationRule = {
-        "method" : "required|string",
         "title": "string|min:4",
         "description": "string|min:4",
-        "body_data": "string",
-        "header_data": "string"
+        "body_data": "string|required",
+        "header_data": "string|required",
+        "tags": "string|required",
     };
     
     const validationResult: any = await RequestValidator(req.body, validationRule, {})

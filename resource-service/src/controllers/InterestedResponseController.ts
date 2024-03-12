@@ -22,7 +22,7 @@ export const add = (bodyParser.urlencoded(), async(req: Request, res: Response, 
     const unique_id: String = generateRandomString(30).toLowerCase()
 
     //Now create a new interested_response
-    interested_response = new InterestedResponse({
+    interested_response = await InterestedResponse.create({
         unique_id: unique_id,
         title: req.body.title,
         request_id: req.body.request_id,

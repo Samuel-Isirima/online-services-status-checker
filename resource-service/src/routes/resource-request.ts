@@ -13,7 +13,6 @@ const resourceRequestRouter: Router = Router()
 
 
 resourceRequestRouter.post('/create', Auth, CreateResourceRequestRequest.createResourceRequest, ResourceRequestController.create)
-resourceRequestRouter.get('/', Auth, GetResourceRequestsRequest.getResourceRequests, ResourceRequestController.index)
 resourceRequestRouter.get('/:identifier', Auth, GetResourceRequestRequest.getResourceRequest,  ResourceRequestController.get)
 resourceRequestRouter.post('/:identifier/update', Auth, UpdateResourceRequestRequest.updateResourceRequest, ResourceRequestController.update)
 
