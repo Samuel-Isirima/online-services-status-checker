@@ -56,6 +56,7 @@ export const create = (bodyParser.urlencoded(), async(req: Request, res: Respons
         unique_id: unique_id,
         title: req.body.title,
         request_unique_id: req.body.request_identifier,
+        description: req.body.description,
         category: req.body.category,
         http_status_code: req.body.http_status_code,
         http_status_code_range: req.body.http_status_code_range,

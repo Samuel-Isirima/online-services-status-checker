@@ -6,7 +6,7 @@ const ResourceRequestController = require('../controllers/ResourceRequestControl
 const CreateResourceRequestRequest = require('../requests/resource-request/CreateResourceRequestRequest');
 const UpdateResourceRequestRequest = require('../requests/resource-request/UpdateResourceRequestRequest');
 const GetResourceRequestRequest = require('../requests/resource-request/GetResourceRequestRequest');
-const GetResourceRequestsRequest = require('../requests/resource-request/GetResourceRequestsRequest');
+const GetInterestedResponsesRequest = require('../requests/resource-request/GetInterestedResponsesRequest');
 
 const resourceRequestRouter: Router = Router()
 
@@ -14,6 +14,7 @@ const resourceRequestRouter: Router = Router()
 
 resourceRequestRouter.post('/create', Auth, CreateResourceRequestRequest.createResourceRequest, ResourceRequestController.create)
 resourceRequestRouter.get('/:identifier', Auth, GetResourceRequestRequest.getResourceRequest,  ResourceRequestController.get)
+resourceRequestRouter.get('/:identifier/responses', Auth, GetInterestedResponsesRequest.getInterestedResponses,  ResourceRequestController.getAllInterestedResponses)
 resourceRequestRouter.post('/:identifier/update', Auth, UpdateResourceRequestRequest.updateResourceRequest, ResourceRequestController.update)
 
 export default resourceRequestRouter;

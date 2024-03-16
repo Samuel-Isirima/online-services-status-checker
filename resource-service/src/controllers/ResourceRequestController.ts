@@ -8,6 +8,7 @@ import RequestValidator from '../helpers/RequestValidator';
 import ResourceRequest, { IResourceRequest } from '../models/ResourceRequest';
 import { generateRandomString } from '../utils/RandomStringGenerator';
 import Resource, { IResource } from '../models/Resource';
+import InterestedResponse, { IInterestedResponse } from '../models/InterestedResponse';
 
 export const index = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
 {
@@ -91,6 +92,36 @@ export const get = (bodyParser.urlencoded(), async(req: Request, res: Response, 
     }
     return res.status(200).send({ message: `Request retrieved successfully.`, request: request})
 })
+
+
+
+
+export const getAllInterestedResponses = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
+{
+    const request: IResourceRequest | null = await ResourceRequest.findOne({ unique_id: req.params.identifier })
+    if(!request)
+    {
+        return res.status(401).send({ message: `Request not found.`})
+    }
+    //check if the resource exists and is owned by the user
+    const resource: IResource | null = await Resource.findOne
+    ({
+        unique_id: request.resource_unique_id,
+        user_id: req.user.id
+    })
+    if(!resource)
+    {
+        return res.status(401).send({ message: `Request not found.`})
+    }
+
+    //Now get the responses for this request
+    const responses: IInterestedResponse[] | null = await InterestedResponse.find({
+        request_unique_id: req.params.identifier
+    })
+    return res.status(200).send({ message: `Responses retrieved successfully.`, responses: responses})
+})
+
+
 
 
 export const update = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) =>
