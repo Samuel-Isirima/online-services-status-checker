@@ -11,10 +11,10 @@ export interface IInterestedResponse extends Document {
   unique_id: String;
   title: String;
   description: String;
-  request_id: String;
+  request_unique_id: String;
   category: String;     //Specific code response or code range
-  http_status_code: String;
-  http_status_code_range: String;
+  http_status_code?: String;
+  http_status_code_range?: String;
 }
 
 //create InterestedResponse schema
@@ -33,7 +33,7 @@ const InterestedResponseSchema = new Schema<IInterestedResponse>(
       type: String,
       required: false,
     },
-    request_id: {
+    request_unique_id: {
       type: String,
       required: true,
     },
@@ -43,11 +43,11 @@ const InterestedResponseSchema = new Schema<IInterestedResponse>(
     },
     http_status_code: {
       type: String,
-      required: true,
+      required: false,
     },
     http_status_code_range: {
       type: String,
-      required: true,
+      required: false,
     }
   },
   {

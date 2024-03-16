@@ -2,14 +2,14 @@ import e, { Router, Request, Response, NextFunction} from "express"
 import bodyParser from "body-parser";
 import RequestValidator from "../../helpers/RequestValidator";
 
-export const addInterestedResponse = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
+export const createInterestedResponse = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
 
     const validationRule = {
         "title": "string|required",
         "description": "string|required",
-        "request_id": "string|required",
-        "category": "string",
+        "request_identifier": "string|required",
+        "category": "string|required",
         "http_status_code": "required_if:category,CODE",
         "http_status_code_range" : "required_if:category,CODE_RANGE",
     };

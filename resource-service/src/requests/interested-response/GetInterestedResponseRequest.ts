@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 
 export const getInterestedResponse = (bodyParser.urlencoded(), async(req: Request, res: Response, next: NextFunction) => 
 {
-    if(!req.params.interested_response_unique_id)
+    if(!req.params.identifier)
     {
         return res.status(401).send({ message: `Response not specified.`})
     }
